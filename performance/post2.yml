@@ -1,0 +1,32 @@
+config: 
+  target: "http://httpbin.org/"
+  phases:
+    - duration: 1
+      arrivalRate: 1
+      name: Goit Performance Test
+  payload:
+    - path: "ddd.csv"
+      fields:
+        - "keyword1"
+        - "keyword2"
+scenarios:
+  - name: Get a resource
+    flow:
+      - get:
+          url: "/get?param1={{keyword1}}"
+      - post:
+          url: "/post?param2={{keyword2}}"
+          json:
+            username: "Goit"
+            password: "12345"
+          headers:
+            Content-Type: "application/json"
+          capture:
+            - json: "$.json"
+              as: "response_body"
+            - json: "$.headers.Host"
+              as: "host"
+      - log: "Response Body : {{response_body}}"
+      - log: "Host : {{host}}"
+      - log: "ilk deger: {{keyword1}}"
+      - log: "ikinci deger: {{keyword2}}"

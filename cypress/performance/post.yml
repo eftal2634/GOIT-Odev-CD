@@ -1,0 +1,36 @@
+config: 
+  target: "http://httpbin.org/"
+  phases:
+    - duration: 1
+      arrivalRate: 1
+      name: Goit Performance Test
+  plugins:
+    ensure:
+      thresholds:
+        - http.response_time.max: 7060     
+        - http.reponse_time.5xx.p95: 184 
+        - http.reponse_time.2xx.p95: 2777
+      conditions:
+        - expression: http.responses == 1
+scenarios:
+  - name: Creat Account
+    flow:
+      - post:
+          url: "/post"
+          json:
+            username: "Goit"
+            password: "12345"
+          headers:
+            Content-Type: "application/json"
+          capture:
+            - json: "$.json"
+              as: "response_body"
+            - json: "$.headers.Host"
+              as: "host"
+      - log: "Response Body : {{response_body}}"
+      - log: "Host : {{host}}"
+
+  
+
+  
+          
